@@ -1,0 +1,34 @@
+package de.linde.smsbot;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.twilio.twiml.Body;
+import com.twilio.twiml.Message;
+import com.twilio.twiml.MessagingResponse;
+import com.twilio.twiml.TwiMLException;
+
+public class TwilioServlet extends HttpServlet {
+
+	/**
+	 * service() responds to both GET and POST requests. You can also use
+	 * doGet() or doPost()
+	 **/
+	@Override
+	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Message message = new Message.Builder().body(new Body("Hello, Mobile Monkey")).build();
+
+		MessagingResponse twiml = new MessagingResponse.Builder().message(message).build();
+
+		response.setContentType("application/xml");
+
+		try {
+			response.getWriter().print(twiml.toXml());
+		} catch (TwiMLException e) {
+			e.printStackTrace();
+		}
+	}
+}
